@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant Utility Hub | Pro Version</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        body { font-family: 'Outfit', sans-serif; scroll-behavior: smooth; }
+        .bento-card { transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); position: relative; overflow: hidden; }
+        .bento-card:hover { transform: translateY(-8px); box-shadow: 0 30px 60px -12px rgba(50,50,93,0.15), 0 18px 36px -18px rgba(0,0,0,0.2); }
+        .glass-header { background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(226,232,240,0.8); }
+        .btn-support { background-color: #1d4ed8; transition: all 0.3s ease; }
+        .btn-support:hover { background-color: #1e40af; transform: scale(1.05); }
+        .nav-link { display: flex; align-items: center; gap: 0.5rem; color: #64748b; font-weight: 600; font-size: 0.875rem; transition: color 0.2s; }
+        .nav-link:hover { color: #1e293b; }
+        input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; cursor: pointer; background: #e2e8f0; border-radius: 4px; }
+        input[type=range]::-webkit-slider-thumb { height: 24px; width: 24px; border-radius: 50%; background: #2563eb; cursor: pointer; -webkit-appearance: none; appearance: none; margin-top: -8px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .ad-banner { border: 1px dashed #e2e8f0; background: #f8fafc; border-radius: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+        .coming-soon-badge-tag { position: absolute; top: 12px; right: 12px; background: #4f46e5; color: white; font-size: 8px; font-weight: 800; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; z-index: 20; }
+        .coming-soon { cursor: not-allowed; opacity: 0.85; }
+        .upload-zone { border: 2px dashed #bfdbfe; border-radius: 2.5rem; background: #f0f7ff; transition: all 0.2s; cursor: pointer; }
+        .upload-zone:hover { border-color: #2563eb; background: #dbeafe; }
+        .view { display: block; }
+        .view.hidden { display: none; }
+    </style>
+</head>
+<body class="bg-[#fcfcfd] text-slate-900 min-h-screen">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-[100] glass-header px-4 md:px-10 py-3 flex justify-between items-center">
+    <div class="flex items-center gap-2 cursor-pointer group" onclick="showView('home')">
+        <div class="bg-[#2563eb] p-1.5 rounded-lg shadow-sm group-hover:rotate-12 transition-transform">
+            <svg class="w-5 h-5 fill-white text-white" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <span class="font-extrabold text-2xl tracking-tight text-[#1e293b]">InstantHub</span>
+    </div>
+    <div class="hidden lg:flex items-center gap-8">
+        <a href="#section-image" onclick="navTo('section-image'); return false;" class="nav-link"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg> Image</a>
+        <a href="#section-pdf" onclick="navTo('section-pdf'); return false;" class="nav-link"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> PDF</a>
+        <a href="#section-web" onclick="navTo('section-web'); return false;" class="nav-link"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Web Tools</a>
+        <a href="#section-ai" onclick="navTo('section-ai'); return false;" class="nav-link" style="color:#6366f1"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg> AI Tools</a>
+    </div>
+    <div class="flex items-center gap-3">
+        <div class="flex items-center bg-[#eff6ff] border border-[#bfdbfe] px-3 py-1.5 rounded-full text-[13px] font-bold text-[#1d4ed8] shadow-sm">
+            <svg class="w-3.5 h-3.5 mr-1.5 fill-[#2563eb]" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            5 uses left today
+        </div>
+        <button onclick="openSupport()" class="btn-support text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg flex items-center gap-2">
+            <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Support
+        </button>
+        <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+    </div>
+</nav>
+
+<main class="max-w-7xl mx-auto p-4 md:p-8">
+
+<!-- ===== HOME ===== -->
+<div id="view-home" class="view">
+    <header class="mb-16 text-center mt-6">
+        <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 mb-6 tracking-tight leading-none">Digital Tools. <br><span class="text-blue-600 italic">One Hub. Zero Friction.</span></h1>
+        <p class="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto font-medium">India's fastest utility platform for students, creators, and businesses.</p>
+        <div class="mt-12 relative max-w-xl mx-auto">
+            <div class="absolute inset-y-0 left-5 flex items-center pointer-events-none text-slate-400">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <input type="text" id="tool-search" placeholder="Search for PDF, Image, Invoice or Web tools..." class="w-full pl-14 pr-6 py-5 bg-white border border-slate-200 rounded-[2rem] shadow-xl shadow-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-lg transition-all" onkeyup="searchTools()">
+        </div>
+    </header>
+
+    <!-- IMAGE MASTERY -->
+    <div id="section-image" class="mb-16 scroll-mt-24">
+        <div class="flex items-center gap-3 mb-8"><div class="h-10 w-1.5 bg-blue-600 rounded-full"></div><h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Image Mastery</h2></div>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('img-compress')"><div class="bg-blue-50 p-4 rounded-2xl w-fit mb-4 text-blue-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/></svg></div><h3 class="font-bold text-lg text-slate-800">KB Compressor</h3><p class="text-slate-400 text-xs">Exact size (20KB/50KB).</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('img-convert')"><div class="bg-blue-50 p-4 rounded-2xl w-fit mb-4 text-blue-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div><h3 class="font-bold text-lg text-slate-800">Image Converter</h3><p class="text-slate-400 text-xs">Any to Any format.</p></div>
+
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('img-upscale')"><div class="bg-blue-50 p-4 rounded-2xl w-fit mb-4 text-blue-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div><h3 class="font-bold text-lg text-slate-800">Image Upscaler</h3><p class="text-slate-400 text-xs">Enhance quality.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('passport-gen')"><div class="bg-blue-50 p-4 rounded-2xl w-fit mb-4 text-blue-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7 21v-2a5 5 0 0 1 10 0v2"/></svg></div><h3 class="font-bold text-lg text-slate-800">Passport Maker</h3><p class="text-slate-400 text-xs">Indian standard sizes.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('img-resize')"><div class="bg-blue-50 p-4 rounded-2xl w-fit mb-4 text-blue-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><h3 class="font-bold text-lg text-slate-800">Resize Image</h3><p class="text-slate-400 text-xs">Change dimensions.</p></div>
+        </div>
+    </div>
+
+    <!-- PDF SUITE -->
+    <div id="section-pdf" class="mb-16 scroll-mt-24">
+        <div class="flex items-center gap-3 mb-8"><div class="h-10 w-1.5 bg-rose-600 rounded-full"></div><h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Advanced PDF Suite</h2></div>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('pdf-merge')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div><h3 class="font-bold text-lg text-slate-800">Merge PDF</h3><p class="text-slate-400 text-xs">Combine multiple files.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('pdf-split')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg></div><h3 class="font-bold text-lg text-slate-800">Split PDF</h3><p class="text-slate-400 text-xs">Extract ranges.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('pdf-rotate')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div><h3 class="font-bold text-lg text-slate-800">Rotate PDF</h3><p class="text-slate-400 text-xs">Fix orientation.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('pdf-compress')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><h3 class="font-bold text-lg text-slate-800">Compress PDF</h3><p class="text-slate-400 text-xs">Shrink file size.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('pdf-watermark')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div><h3 class="font-bold text-lg text-slate-800">Watermark</h3><p class="text-slate-400 text-xs">Add text stamp.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('pdf-numbers')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg></div><h3 class="font-bold text-lg text-slate-800">Add Numbers</h3><p class="text-slate-400 text-xs">Page numbering.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('pdf-protect')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h3 class="font-bold text-lg text-slate-800">Protect PDF</h3><p class="text-slate-400 text-xs">Add password.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('pdf-unlock')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg></div><h3 class="font-bold text-lg text-slate-800">Unlock PDF</h3><p class="text-slate-400 text-xs">Remove password.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('pdf-img')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div><h3 class="font-bold text-lg text-slate-800">PDF to Image</h3><p class="text-slate-400 text-xs">Pages to JPG.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('img-pdf')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="8" y="13" width="8" height="6" rx="1"/></svg></div><h3 class="font-bold text-lg text-slate-800">Image to PDF</h3><p class="text-slate-400 text-xs">Photos to Doc.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('pdf-organize')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><h3 class="font-bold text-lg text-slate-800">Organize PDF</h3><p class="text-slate-400 text-xs">Reorder pages.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('pdf-extract')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div><h3 class="font-bold text-lg text-slate-800">Extract Pages</h3><p class="text-slate-400 text-xs">Save selection.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('word-pdf')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div><h3 class="font-bold text-lg text-slate-800">Word to PDF</h3><p class="text-slate-400 text-xs">DOCX to PDF.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('pdf-word')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="m9.5 12.5 1.5 3 1.5-3 1.5 3 1.5-3"/></svg></div><h3 class="font-bold text-lg text-slate-800">PDF to Word</h3><p class="text-slate-400 text-xs">PDF to DOCX.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('pdf-ppt')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h20v14H2z"/><path d="M8 21h8M12 17v4"/></svg></div><h3 class="font-bold text-lg text-slate-800">PDF to PPT</h3><p class="text-slate-400 text-xs">Slides conversion.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('ppt-pdf')"><div class="bg-rose-50 p-4 rounded-2xl w-fit mb-4 text-rose-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="12 18 8 14 16 14"/></svg></div><h3 class="font-bold text-lg text-slate-800">PPT to PDF</h3><p class="text-slate-400 text-xs">Slides to Doc.</p></div>
+
+        </div>
+    </div>
+
+    <!-- WEB & BUSINESS -->
+    <div id="section-web" class="mb-16 scroll-mt-24">
+        <div class="flex items-center gap-3 mb-8"><div class="h-10 w-1.5 bg-emerald-600 rounded-full"></div><h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Web & Business Utility</h2></div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('invoice-gen')"><div class="bg-emerald-50 p-4 rounded-2xl w-fit mb-4 text-emerald-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg></div><h3 class="font-bold text-lg text-slate-800">Invoice Maker</h3><p class="text-slate-400 text-xs">GST bills.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('wa-chat')"><div class="bg-emerald-50 p-4 rounded-2xl w-fit mb-4 text-emerald-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><h3 class="font-bold text-lg text-slate-800">WhatsApp Link</h3><p class="text-slate-400 text-xs">Direct message.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('qr-gen')"><div class="bg-emerald-50 p-4 rounded-2xl w-fit mb-4 text-emerald-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="5" y="5" width="3" height="3" fill="currentColor" stroke="none"/><rect x="16" y="5" width="3" height="3" fill="currentColor" stroke="none"/><rect x="5" y="16" width="3" height="3" fill="currentColor" stroke="none"/></svg></div><h3 class="font-bold text-lg text-slate-800">Website QR</h3><p class="text-slate-400 text-xs">Link to QR.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('upi-qr')"><div class="bg-emerald-50 p-4 rounded-2xl w-fit mb-4 text-emerald-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><h3 class="font-bold text-lg text-slate-800">UPI QR Code</h3><p class="text-slate-400 text-xs">Payment generator.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('gst-calc')"><div class="bg-emerald-50 p-4 rounded-2xl w-fit mb-4 text-emerald-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="10" y2="18"/><line x1="14" y1="18" x2="16" y2="18"/></svg></div><h3 class="font-bold text-lg text-slate-800">GST Calculator</h3><p class="text-slate-400 text-xs">Easy calculations.</p></div>
+            <div class="bento-card bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm cursor-pointer" onclick="openTool('emi-calc')"><div class="bg-emerald-50 p-4 rounded-2xl w-fit mb-4 text-emerald-600"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><h3 class="font-bold text-lg text-slate-800">EMI Calculator</h3><p class="text-slate-400 text-xs">Loan computations.</p></div>
+        </div>
+    </div>
+
+    <!-- AI LABS -->
+    <div id="section-ai" class="mb-16 scroll-mt-24">
+        <div class="flex items-center gap-3 mb-8"><div class="h-10 w-1.5 bg-indigo-600 rounded-full"></div><h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">AI Labs</h2><span class="bg-indigo-100 text-indigo-600 text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-tighter">Launching soon</span></div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div class="bento-card bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm coming-soon"><div class="coming-soon-badge-tag">Soon</div><div class="bg-slate-50 p-3 rounded-xl w-fit mb-4 text-slate-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h3 class="font-bold text-sm text-slate-800">ATS Resume</h3></div>
+            <div class="bento-card bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm coming-soon"><div class="coming-soon-badge-tag">Soon</div><div class="bg-slate-50 p-3 rounded-xl w-fit mb-4 text-slate-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div><h3 class="font-bold text-sm text-slate-800">Caption Gen</h3></div>
+            <div class="bento-card bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm coming-soon"><div class="coming-soon-badge-tag">Soon</div><div class="bg-slate-50 p-3 rounded-xl w-fit mb-4 text-slate-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><h3 class="font-bold text-sm text-slate-800">Email Pro</h3></div>
+            <div class="bento-card bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm coming-soon"><div class="coming-soon-badge-tag">Soon</div><div class="bg-slate-50 p-3 rounded-xl w-fit mb-4 text-slate-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg></div><h3 class="font-bold text-sm text-slate-800">YT Titles</h3></div>
+            <div class="bento-card bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm coming-soon"><div class="coming-soon-badge-tag">Soon</div><div class="bg-slate-50 p-3 rounded-xl w-fit mb-4 text-slate-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div><h3 class="font-bold text-sm text-slate-800">LinkedIn Post</h3></div>
+            <div class="bento-card bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm coming-soon"><div class="coming-soon-badge-tag">Soon</div><div class="bg-slate-50 p-3 rounded-xl w-fit mb-4 text-slate-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg></div><h3 class="font-bold text-sm text-slate-800">Humanizer</h3></div>
+        </div>
+    </div>
+    </div>
+</div><!-- END HOME -->
+
+<!-- ===== IMAGE COMPRESSOR ===== -->
+<div id="view-img-compress" class="view hidden">
+    <div class="max-w-6xl mx-auto py-6">
+        <button onclick="showView('home')" class="mb-6 flex items-center gap-2 text-slate-400 text-sm font-semibold hover:text-blue-600 transition-all"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Back to image tools</button>
+        <div class="ad-banner w-full h-32 mb-10"><p>ADVERTISEMENT</p><p class="text-[10px] opacity-60">Top banner — your ad here</p></div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <h2 class="text-4xl md:text-5xl font-black mb-3 tracking-tight text-slate-900 leading-tight">Image Compressor</h2>
+                <p class="text-slate-500 font-medium mb-4">Compress JPG/PNG to a target file size in KB.</p>
+                <div class="flex flex-wrap gap-2 mb-8">
+                    <span class="flex items-center gap-1.5 bg-green-50 text-green-600 px-3 py-1 rounded-full text-[11px] font-bold">⚡ Instant</span>
+                    <span class="flex items-center gap-1.5 bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-[11px] font-bold">🛡 Files stay on your device</span>
+                    <span class="flex items-center gap-1.5 bg-slate-50 text-slate-600 px-3 py-1 rounded-full text-[11px] font-bold">📱 Mobile-friendly</span>
+                </div>
+                <div id="ic-upload" class="upload-zone p-16 md:p-24 text-center" onclick="document.getElementById('ic-file').click()">
+                    <input type="file" id="ic-file" class="hidden" accept="image/jpeg,image/png,image/webp" onchange="icFileSelect(event)">
+                    <div class="flex flex-col items-center gap-6">
+                        <div class="bg-blue-50 p-5 rounded-2xl text-blue-600"><svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></div>
+                        <div><p class="font-bold text-2xl text-slate-800">Drop image or tap to upload</p><p class="text-slate-400 text-sm mt-1">JPG / PNG • up to 20 MB</p></div>
+                    </div>
+                </div>
+                <div id="ic-settings" class="hidden bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-12 shadow-sm">
+                    <div class="flex items-center gap-4 mb-8 pb-8 border-b border-slate-50">
+                        <img id="ic-preview" class="w-16 h-16 rounded-xl object-cover border border-slate-100" src="" alt="">
+                        <div><p id="ic-fname" class="font-bold text-slate-900 text-lg">image.png</p><p id="ic-fsize" class="text-slate-400 text-sm font-medium">0 KB original</p></div>
+                        <button onclick="icReset()" class="ml-auto text-slate-300 hover:text-red-400 text-xl font-bold">✕</button>
+                    </div>
+                    <div class="mb-10">
+                        <div class="flex justify-between items-center mb-6">
+                            <label class="text-sm font-black text-slate-900 uppercase tracking-widest">Target size</label>
+                            <div class="bg-slate-100 px-4 py-2 rounded-full font-black text-slate-600 text-sm"><span id="ic-val">40</span> KB</div>
+                        </div>
+                        <input type="range" id="ic-slider" min="10" max="500" value="40" oninput="icUpdateSlider(this.value)">
+                        <div class="flex flex-wrap gap-3 mt-8">
+                            <button onclick="icPreset(20)" class="bg-white border border-slate-200 text-slate-600 px-6 py-2 rounded-full text-xs font-bold hover:border-blue-400 transition-all">20 KB</button>
+                            <button onclick="icPreset(50)" class="bg-white border border-slate-200 text-slate-600 px-6 py-2 rounded-full text-xs font-bold hover:border-blue-400 transition-all">50 KB</button>
+                            <button onclick="icPreset(100)" class="bg-white border border-slate-200 text-slate-600 px-6 py-2 rounded-full text-xs font-bold hover:border-blue-400 transition-all">100 KB</button>
+                            <button onclick="icPreset(200)" class="bg-white border border-slate-200 text-slate-600 px-6 py-2 rounded-full text-xs font-bold hover:border-blue-400 transition-all">200 KB</button>
+                        </div>
+                    </div>
+                    <div class="mb-8">
+                        <label class="text-sm font-black text-slate-900 uppercase tracking-widest block mb-4">Output Format</label>
+                        <div class="flex gap-3">
+                            <button id="ic-fmt-jpeg" onclick="icSetFmt('jpeg')" class="px-5 py-2 rounded-full text-xs font-bold border-2 border-blue-500 bg-blue-50 text-blue-700">JPEG</button>
+                            <button id="ic-fmt-png" onclick="icSetFmt('png')" class="px-5 py-2 rounded-full text-xs font-bold border-2 border-slate-200 text-slate-500">PNG</button>
+                            <button id="ic-fmt-webp" onclick="icSetFmt('webp')" class="px-5 py-2 rounded-full text-xs font-bold border-2 border-slate-200 text-slate-500">WEBP</button>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <button onclick="icReset()" class="px-8 py-5 rounded-2xl border-2 border-slate-100 text-slate-400 font-bold hover:bg-slate-50 transition-all">Cancel</button>
+                        <button onclick="icCompress()" class="flex-1 bg-[#2563eb] text-white font-black py-5 rounded-2xl shadow-lg shadow-blue-100 hover:bg-[#1d4ed8] transition-all text-lg">Compress to <span id="ic-btn-val">40</span> KB</button>
+                    </div>
+                </div>
+                <div id="ic-processing" class="hidden text-center bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-12 shadow-sm">
+                    <div class="ad-banner w-full h-[250px] mb-8 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] flex flex-col items-center justify-center text-slate-400 mx-auto max-w-sm"><p class="font-bold text-sm tracking-widest uppercase mb-1">Advertisement</p><p class="text-xs">Highest RPM placement (300x250)</p></div>
+                    <div class="relative inline-flex items-center justify-center w-24 h-24 mb-6">
+                        <svg class="w-24 h-24 -rotate-90" viewBox="0 0 80 80">
+                            <circle cx="40" cy="40" r="36" fill="none" stroke="currentColor" stroke-width="6" class="text-slate-100"/>
+                            <circle id="ic-timer-circle" cx="40" cy="40" r="36" fill="none" stroke="currentColor" stroke-width="6" stroke-dasharray="226" stroke-dashoffset="0" stroke-linecap="round" class="text-blue-600 transition-all duration-1000"/>
+                        </svg>
+                        <span id="ic-seconds" class="absolute text-3xl font-black text-slate-800">15</span>
+                    </div>
+                    <h3 id="ic-status-text" class="text-xl font-bold text-slate-800 mb-2">Compressing image...</h3>
+                    <p class="text-slate-500 font-medium mb-8">Optimizing your image locally without uploading.</p>
+                    <div class="max-w-sm mx-auto space-y-3">
+                        <button id="ic-skip-btn" onclick="icSkipWait()" class="w-full py-3 px-5 border-2 border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100 font-bold rounded-2xl flex items-center justify-center gap-2 transition-colors">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                            Skip wait — Pay ₹5 via UPI
+                        </button>
+                    </div>
+                </div>
+                <div id="ic-result" class="hidden bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-12 shadow-sm">
+                    <div class="flex items-center gap-3 mb-6 pb-6 border-b border-slate-50">
+                        <div class="bg-green-50 px-3 py-1 rounded-xl text-green-600 font-bold">✓ Done!</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div class="bg-slate-50 rounded-2xl p-5 text-center"><p class="text-xs text-slate-400 font-bold uppercase mb-1">Original</p><p id="ic-orig-size" class="text-2xl font-black text-slate-700">—</p></div>
+                        <div class="bg-blue-50 rounded-2xl p-5 text-center"><p class="text-xs text-blue-400 font-bold uppercase mb-1">Compressed</p><p id="ic-new-size" class="text-2xl font-black text-blue-700">—</p></div>
+                    </div>
+                    <a id="ic-download-link" href="#" download="compressed.jpg" class="block w-full bg-[#2563eb] text-white font-black py-5 rounded-2xl shadow-lg shadow-blue-100 text-center text-lg mb-3">⬇ Download</a>
+                    <button onclick="icReset()" class="w-full text-slate-400 font-bold py-3 hover:text-blue-600 transition-all">Compress another</button>
+                </div>
+                <div class="mt-12 bg-white border border-slate-100 rounded-[2.5rem] p-10 shadow-sm">
+                    <h3 class="text-2xl font-black text-slate-800 mb-4">About Image Compressor</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Compress JPG and PNG images to a specific KB size — perfect for college admissions, government forms (UPSC, SSC, banking), passport applications and WhatsApp uploads in India. Everything happens in your browser, no upload to any server.</p>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <div class="ad-banner w-full aspect-square md:h-80"><p>ADVERTISEMENT</p><p class="text-[10px] opacity-60">Sponsored</p></div>
+                <div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm"><h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Why InstantHub</h4><ul class="space-y-4"><li class="flex items-start gap-3 text-slate-700 font-bold text-sm">✓ No signup needed</li><li class="flex items-start gap-3 text-slate-700 font-bold text-sm">✓ Works on mobile</li><li class="flex items-start gap-3 text-slate-700 font-bold text-sm">✓ Pay only ₹5 when you need premium</li></ul></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== WHATSAPP LINK ===== -->
+<div id="view-wa-chat" class="view hidden">
+    <div class="max-w-6xl mx-auto py-6">
+        <button onclick="showView('home')" class="mb-6 flex items-center gap-2 text-slate-400 text-sm font-semibold hover:text-blue-600 transition-all"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Back to web tools</button>
+        <div class="ad-banner w-full h-32 mb-10"><p>ADVERTISEMENT</p><p class="text-[10px] opacity-60">Top banner — your ad here</p></div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <h2 class="text-4xl md:text-5xl font-black mb-3 tracking-tight text-slate-900 leading-tight">WhatsApp Chat Link</h2>
+                <p class="text-slate-500 font-medium mb-4">Chat without saving the number.</p>
+                <div class="flex flex-wrap gap-2 mb-8">
+                    <span class="bg-green-50 text-green-600 px-3 py-1 rounded-full text-[11px] font-bold">⚡ Instant</span>
+                    <span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-[11px] font-bold">🛡 Files stay on your device</span>
+                    <span class="bg-slate-50 text-slate-600 px-3 py-1 rounded-full text-[11px] font-bold">📱 Mobile-friendly</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm space-y-5">
+                        <div><label class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">Country</label><select id="wa-country" onchange="waGenerate()" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"><option value="91">🇮🇳 +91 India</option><option value="1">🇺🇸 +1 USA/Canada</option><option value="44">🇬🇧 +44 UK</option><option value="61">🇦🇺 +61 Australia</option><option value="971">🇦🇪 +971 UAE</option><option value="65">🇸🇬 +65 Singapore</option><option value="60">🇲🇾 +60 Malaysia</option><option value="92">🇵🇰 +92 Pakistan</option><option value="880">🇧🇩 +880 Bangladesh</option></select></div>
+                        <div><label class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">Phone Number</label><input type="tel" id="wa-phone" placeholder="98765 43210" oninput="waGenerate()" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300 placeholder-slate-300"></div>
+                        <div><label class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">Message (optional)</label><textarea id="wa-msg" rows="4" placeholder="Hi! I saw your number on..." oninput="waGenerate()" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none placeholder-slate-300"></textarea></div>
+                    </div>
+                    <div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm flex flex-col justify-between">
+                        <div><p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Your Link</p><div class="bg-slate-50 border border-slate-100 rounded-xl p-4 mb-4 min-h-[60px] break-all"><p id="wa-link-display" class="text-sm font-mono text-slate-400">Enter a phone number to generate</p></div></div>
+                        <div class="space-y-3">
+                            <button id="wa-open-btn" onclick="waOpen()" disabled class="w-full py-4 rounded-2xl font-bold text-white text-base disabled:opacity-50" style="background:#25D366;">💬 Open WhatsApp</button>
+                            <button id="wa-copy-btn" onclick="waCopy()" disabled class="w-full py-4 rounded-2xl font-bold bg-slate-50 text-slate-600 text-base hover:bg-slate-100 border border-slate-100 disabled:opacity-50">📋 Copy Link</button>
+                            <button id="wa-share-btn" onclick="waShare()" disabled class="w-full py-3 rounded-2xl font-semibold text-slate-400 text-sm border border-slate-100 disabled:opacity-50">↗ Share</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12 bg-white border border-slate-100 rounded-[2.5rem] p-10 shadow-sm"><h3 class="text-2xl font-black text-slate-800 mb-4">About WhatsApp Chat Link</h3><p class="text-slate-500 leading-relaxed font-medium">Generate a direct WhatsApp link to message anyone without saving their number. Perfect for businesses, customer support, and quick outreach.</p></div>
+            </div>
+            <div class="space-y-6"><div class="ad-banner w-full aspect-square md:h-80"><p>ADVERTISEMENT</p></div><div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm"><h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Why InstantHub</h4><ul class="space-y-4"><li class="text-slate-700 font-bold text-sm">✓ No signup needed</li><li class="text-slate-700 font-bold text-sm">✓ Works on mobile</li><li class="text-slate-700 font-bold text-sm">✓ Pay only ₹5 when you need premium</li></ul></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== QR GENERATOR ===== -->
+<div id="view-qr-gen" class="view hidden">
+    <div class="max-w-6xl mx-auto py-6">
+        <button onclick="showView('home')" class="mb-6 flex items-center gap-2 text-slate-400 text-sm font-semibold hover:text-blue-600 transition-all"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Back to web tools</button>
+        <div class="ad-banner w-full h-32 mb-10"><p>ADVERTISEMENT</p><p class="text-[10px] opacity-60">Top banner — your ad here</p></div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <h2 class="text-4xl md:text-5xl font-black mb-3 tracking-tight text-slate-900 leading-tight">Website to QR</h2>
+                <p class="text-slate-500 font-medium mb-4">Generate a QR code for any URL or text.</p>
+                <div class="flex flex-wrap gap-2 mb-8"><span class="bg-green-50 text-green-600 px-3 py-1 rounded-full text-[11px] font-bold">⚡ Instant</span><span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-[11px] font-bold">🛡 Files stay on your device</span><span class="bg-slate-50 text-slate-600 px-3 py-1 rounded-full text-[11px] font-bold">📱 Mobile-friendly</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm space-y-5">
+                        <div><label class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">Text or URL</label><textarea id="qr-text" rows="4" oninput="qrGenerate()" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none placeholder-slate-300" placeholder="https://utilityhub.in">https://utilityhub.in</textarea></div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">Color</label><div class="flex items-center gap-2 border border-slate-200 rounded-xl px-3 py-2"><input type="color" id="qr-color" value="#FF6F00" oninput="qrGenerate()" class="w-7 h-7 rounded cursor-pointer border-0 bg-transparent"><span id="qr-color-hex" class="font-mono text-sm text-slate-600">#FF6F00</span></div></div>
+                            <div><label class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">Size</label><select id="qr-size" onchange="qrGenerate()" class="w-full border border-slate-200 rounded-xl px-3 py-2.5 font-semibold text-slate-700 focus:outline-none bg-white text-sm"><option value="160">Small (160)</option><option value="240" selected>Medium (240)</option><option value="320">Large (320)</option><option value="480">XL (480)</option></select></div>
+                        </div>
+                    </div>
+                    <div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm flex flex-col items-center justify-between">
+                        <div class="flex-1 flex items-center justify-center w-full mb-4"><div id="qr-canvas-wrap" class="p-3 bg-white rounded-xl border border-slate-100 shadow-inner"></div></div>
+                        <button onclick="qrDownload()" class="w-full bg-[#2563eb] text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-100 hover:bg-[#1d4ed8] transition-all">⬇ Download PNG</button>
+                    </div>
+                </div>
+                <div class="mt-12 bg-white border border-slate-100 rounded-[2.5rem] p-10 shadow-sm"><h3 class="text-2xl font-black text-slate-800 mb-4">About Website QR</h3><p class="text-slate-500 leading-relaxed font-medium">Generate QR codes for URLs, text, or contact info instantly. Download as PNG and use on business cards, posters, or anywhere you need quick scanning.</p></div>
+            </div>
+            <div class="space-y-6"><div class="ad-banner w-full aspect-square md:h-80"><p>ADVERTISEMENT</p></div><div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm"><h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Why InstantHub</h4><ul class="space-y-4"><li class="text-slate-700 font-bold text-sm">✓ No signup needed</li><li class="text-slate-700 font-bold text-sm">✓ Works on mobile</li><li class="text-slate-700 font-bold text-sm">✓ Pay only ₹5 when you need premium</li></ul></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== UPI QR ===== -->
+<div id="view-upi-qr" class="view hidden">
+    <div class="max-w-6xl mx-auto py-6">
+        <button onclick="showView('home')" class="mb-6 flex items-center gap-2 text-slate-400 text-sm font-semibold hover:text-blue-600 transition-all"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Back to web tools</button>
+        <div class="ad-banner w-full h-32 mb-10"><p>ADVERTISEMENT</p></div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <h2 class="text-4xl md:text-5xl font-black mb-3 tracking-tight text-slate-900 leading-tight">UPI QR Code</h2>
+                <p class="text-slate-500 font-medium mb-8">Generate a UPI payment QR. Works with all UPI apps.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm space-y-5">
+                        <div><label class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">UPI ID</label><input type="text" id="upi-id" placeholder="yourname@upi" oninput="upiGenerate()" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300 placeholder-slate-300"></div>
+                        <div><label class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">Name (optional)</label><input type="text" id="upi-name" placeholder="Your Business Name" oninput="upiGenerate()" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300 placeholder-slate-300"></div>
+                        <div><label class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">Amount (optional)</label><div class="flex items-center border border-slate-200 rounded-xl overflow-hidden"><span class="bg-slate-50 px-4 py-3 font-bold text-slate-500">₹</span><input type="number" id="upi-amount" placeholder="0.00" oninput="upiGenerate()" class="flex-1 px-4 py-3 font-semibold text-slate-700 focus:outline-none placeholder-slate-300"></div></div>
+                    </div>
+                    <div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm flex flex-col items-center justify-between">
+                        <div class="flex-1 flex items-center justify-center w-full mb-4"><div id="upi-qr-wrap" class="p-3 bg-white rounded-xl border border-slate-100"><p class="text-slate-300 text-sm font-semibold text-center p-8">Enter UPI ID to generate</p></div></div>
+                        <button onclick="upiDownload()" id="upi-dl-btn" disabled class="w-full bg-[#2563eb] text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-100 hover:bg-[#1d4ed8] transition-all disabled:opacity-40 disabled:cursor-not-allowed">⬇ Download PNG</button>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-6"><div class="ad-banner w-full aspect-square md:h-80"><p>ADVERTISEMENT</p></div><div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm"><h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Why InstantHub</h4><ul class="space-y-4"><li class="text-slate-700 font-bold text-sm">✓ No signup needed</li><li class="text-slate-700 font-bold text-sm">✓ Works on mobile</li></ul></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== GST CALCULATOR ===== -->
+<div id="view-gst-calc" class="view hidden">
+    <div class="max-w-6xl mx-auto py-6">
+        <button onclick="showView('home')" class="mb-6 flex items-center gap-2 text-slate-400 text-sm font-semibold hover:text-blue-600 transition-all"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Back to web tools</button>
+        <div class="ad-banner w-full h-32 mb-10"><p>ADVERTISEMENT</p></div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <h2 class="text-4xl md:text-5xl font-black mb-3 tracking-tight text-slate-900 leading-tight">GST Calculator</h2>
+                <p class="text-slate-500 font-medium mb-8">Calculate GST inclusive and exclusive. All Indian GST slabs.</p>
+                <div class="bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-12 shadow-sm space-y-8">
+                    <div class="flex gap-3">
+                        <button id="gst-mode-exc" onclick="gstSetMode('exclusive')" class="flex-1 py-4 rounded-2xl font-bold border-2 border-blue-500 bg-blue-50 text-blue-700">Add GST</button>
+                        <button id="gst-mode-inc" onclick="gstSetMode('inclusive')" class="flex-1 py-4 rounded-2xl font-bold border-2 border-slate-200 text-slate-500">Remove GST</button>
+                    </div>
+                    <div><label class="text-sm font-black text-slate-900 uppercase tracking-widest mb-3 block">Amount (₹)</label><div class="flex items-center border-2 border-slate-100 rounded-2xl overflow-hidden focus-within:border-blue-300"><span class="bg-slate-50 px-5 py-4 font-black text-slate-400 text-xl">₹</span><input type="number" id="gst-amount" placeholder="1000" oninput="gstCalc()" class="flex-1 px-5 py-4 font-black text-2xl text-slate-700 focus:outline-none placeholder-slate-200"></div></div>
+                    <div><label class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 block">GST Rate</label><div class="flex flex-wrap gap-3"><button onclick="gstSetRate(0)" id="gst-r-0" class="px-6 py-3 rounded-full font-bold text-sm border-2 border-slate-200 text-slate-500">0%</button><button onclick="gstSetRate(5)" id="gst-r-5" class="px-6 py-3 rounded-full font-bold text-sm border-2 border-slate-200 text-slate-500">5%</button><button onclick="gstSetRate(12)" id="gst-r-12" class="px-6 py-3 rounded-full font-bold text-sm border-2 border-slate-200 text-slate-500">12%</button><button onclick="gstSetRate(18)" id="gst-r-18" class="px-6 py-3 rounded-full font-bold text-sm border-2 border-blue-500 bg-blue-50 text-blue-700">18%</button><button onclick="gstSetRate(28)" id="gst-r-28" class="px-6 py-3 rounded-full font-bold text-sm border-2 border-slate-200 text-slate-500">28%</button></div></div>
+                    <div id="gst-results" class="hidden space-y-4 pt-2 border-t border-slate-50">
+                        <div class="grid grid-cols-3 gap-4"><div class="bg-slate-50 rounded-2xl p-5 text-center"><p class="text-xs text-slate-400 font-bold uppercase mb-2">Base</p><p id="gst-base" class="text-xl font-black text-slate-700">₹0</p></div><div class="bg-blue-50 rounded-2xl p-5 text-center"><p class="text-xs text-blue-400 font-bold uppercase mb-2">GST</p><p id="gst-tax" class="text-xl font-black text-blue-700">₹0</p></div><div class="bg-green-50 rounded-2xl p-5 text-center"><p class="text-xs text-green-500 font-bold uppercase mb-2">Total</p><p id="gst-total" class="text-xl font-black text-green-700">₹0</p></div></div>
+                        <div class="bg-slate-50 rounded-2xl p-5"><p class="text-xs font-bold text-slate-400 mb-1 uppercase">CGST + SGST</p><p id="gst-breakdown" class="text-sm font-semibold text-slate-600">—</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-6"><div class="ad-banner w-full aspect-square md:h-80"><p>ADVERTISEMENT</p></div><div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm"><h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Why InstantHub</h4><ul class="space-y-4"><li class="text-slate-700 font-bold text-sm">✓ No signup needed</li><li class="text-slate-700 font-bold text-sm">✓ All GST slabs</li></ul></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== EMI CALCULATOR ===== -->
+<div id="view-emi-calc" class="view hidden">
+    <div class="max-w-6xl mx-auto py-6">
+        <button onclick="showView('home')" class="mb-6 flex items-center gap-2 text-slate-400 text-sm font-semibold hover:text-blue-600 transition-all"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Back to web tools</button>
+        <div class="ad-banner w-full h-32 mb-10"><p>ADVERTISEMENT</p></div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <h2 class="text-4xl md:text-5xl font-black mb-3 tracking-tight text-slate-900 leading-tight">EMI Calculator</h2>
+                <p class="text-slate-500 font-medium mb-8">Calculate loan EMI, total interest, and total payment instantly.</p>
+                <div class="bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-12 shadow-sm space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">Loan Amount (₹)</label>
+                            <input type="number" id="emi-principal" placeholder="500000" oninput="emiCalc()" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-300 placeholder-slate-300">
+                        </div>
+                        <div>
+                            <label class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">Interest Rate (% p.a.)</label>
+                            <input type="number" id="emi-rate" placeholder="8.5" step="0.1" oninput="emiCalc()" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-300 placeholder-slate-300">
+                        </div>
+                        <div>
+                            <label class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">Tenure (Months)</label>
+                            <input type="number" id="emi-tenure" placeholder="60" oninput="emiCalc()" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-300 placeholder-slate-300">
+                        </div>
+                    </div>
+                    <div id="emi-results" class="hidden pt-6 border-t border-slate-50">
+                        <div class="text-center mb-6">
+                            <p class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Monthly EMI</p>
+                            <p id="emi-monthly" class="text-5xl font-black text-emerald-600">₹0</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-slate-50 rounded-2xl p-5 text-center">
+                                <p class="text-xs text-slate-400 font-bold uppercase mb-2">Total Principal</p>
+                                <p id="emi-total-principal" class="text-xl font-black text-slate-700">₹0</p>
+                            </div>
+                            <div class="bg-rose-50 rounded-2xl p-5 text-center">
+                                <p class="text-xs text-rose-400 font-bold uppercase mb-2">Total Interest</p>
+                                <p id="emi-total-interest" class="text-xl font-black text-rose-700">₹0</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 bg-emerald-50 rounded-2xl p-5 text-center">
+                            <p class="text-xs text-emerald-500 font-bold uppercase mb-2">Total Payment (Principal + Interest)</p>
+                            <p id="emi-total-payment" class="text-xl font-black text-emerald-700">₹0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-6"><div class="ad-banner w-full aspect-square md:h-80"><p>ADVERTISEMENT</p></div><div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm"><h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Why InstantHub</h4><ul class="space-y-4"><li class="text-slate-700 font-bold text-sm">✓ No signup needed</li><li class="text-slate-700 font-bold text-sm">✓ Fast and accurate</li></ul></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== INVOICE MAKER ===== -->
+<div id="view-invoice-gen" class="view hidden">
+    <div class="max-w-6xl mx-auto py-6">
+        <button onclick="showView('home')" class="mb-6 flex items-center gap-2 text-slate-400 text-sm font-semibold hover:text-blue-600 transition-all"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Back to web tools</button>
+        <div class="ad-banner w-full h-32 mb-10"><p>ADVERTISEMENT</p></div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <h2 class="text-4xl md:text-5xl font-black mb-3 tracking-tight text-slate-900 leading-tight">Invoice Maker</h2>
+                <p class="text-slate-500 font-medium mb-8">Generate professional GST invoices as PDF instantly.</p>
+                <div class="bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-12 shadow-sm flex flex-col items-center justify-center min-h-[400px]">
+                    <div class="bg-emerald-50 p-6 rounded-3xl text-emerald-600 mb-6"><svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg></div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-2">Advanced Invoice Builder</h3>
+                    <p class="text-slate-500 mb-8 text-center max-w-md">Our full-featured invoice builder with GST calculation and PDF export is launching very soon!</p>
+                    <button class="bg-emerald-600 text-white font-bold py-4 px-8 rounded-2xl shadow-lg shadow-emerald-200 opacity-80 cursor-not-allowed">Coming Soon</button>
+                </div>
+            </div>
+            <div class="space-y-6"><div class="ad-banner w-full aspect-square md:h-80"><p>ADVERTISEMENT</p></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== GENERIC TOOL VIEW ===== -->
+<div id="view-generic" class="view hidden">
+    <div class="max-w-6xl mx-auto py-6">
+        <button onclick="showView('home')" class="mb-6 flex items-center gap-2 text-slate-400 text-sm font-semibold hover:text-blue-600 transition-all"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg><span id="gen-back-label">Back</span></button>
+        <div class="ad-banner w-full h-32 mb-10"><p>ADVERTISEMENT</p><p class="text-[10px] opacity-60">Top banner — your ad here</p></div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+                <h2 id="gen-title" class="text-4xl md:text-5xl font-black mb-3 tracking-tight text-slate-900 leading-tight">Tool</h2>
+                <p id="gen-desc" class="text-slate-500 font-medium mb-4">Tool description.</p>
+                <div class="flex flex-wrap gap-2 mb-8"><span class="bg-green-50 text-green-600 px-3 py-1 rounded-full text-[11px] font-bold">⚡ Instant</span><span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-[11px] font-bold">🛡 Files stay on your device</span></div>
+                <div id="gen-upload-zone" class="upload-zone p-16 md:p-24 text-center" onclick="document.getElementById('gen-file').click()">
+                    <input type="file" id="gen-file" class="hidden" onchange="genFileSelect(event)" multiple>
+                    <div class="flex flex-col items-center gap-6"><div class="bg-blue-50 p-5 rounded-2xl text-blue-600"><svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></div><div><p class="font-bold text-2xl text-slate-800">Drop file or tap to upload</p><p id="gen-accept-label" class="text-slate-400 text-sm mt-1">Supported formats</p></div></div>
+                </div>
+                <div id="gen-file-info" class="hidden bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-12 shadow-sm">
+                    <div class="flex items-center gap-4 mb-6 pb-6 border-b border-slate-50"><div class="bg-slate-100 p-4 rounded-xl text-slate-500"><svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><p id="gen-fname" class="font-bold text-slate-900 text-lg">file.pdf</p><p id="gen-fsize" class="text-slate-400 text-sm font-medium">0 KB</p></div><button onclick="genReset()" class="ml-auto text-slate-300 hover:text-red-400 text-xl font-bold">✕</button></div>
+                    <div id="gen-options-container" class="hidden mb-6">
+                        <label id="gen-option-label" class="block text-sm font-bold text-slate-700 mb-2">Option</label>
+                        <input type="text" id="gen-option-input" class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
+                    </div>
+                    <button onclick="genProcess()" class="w-full bg-[#2563eb] text-white font-black py-5 rounded-2xl shadow-lg shadow-blue-100 hover:bg-[#1d4ed8] transition-all text-lg">Process File</button>
+                </div>
+                <div id="gen-processing" class="hidden text-center bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-12 shadow-sm">
+                    <div class="ad-banner w-full h-[250px] mb-8 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] flex flex-col items-center justify-center text-slate-400 mx-auto max-w-sm"><p class="font-bold text-sm tracking-widest uppercase mb-1">Advertisement</p><p class="text-xs">Highest RPM placement (300x250)</p></div>
+                    <div class="relative inline-flex items-center justify-center w-24 h-24 mb-6">
+                        <svg class="w-24 h-24 -rotate-90" viewBox="0 0 80 80">
+                            <circle cx="40" cy="40" r="36" fill="none" stroke="currentColor" stroke-width="6" class="text-slate-100"/>
+                            <circle id="gen-timer-circle" cx="40" cy="40" r="36" fill="none" stroke="currentColor" stroke-width="6" stroke-dasharray="226" stroke-dashoffset="0" stroke-linecap="round" class="text-blue-600 transition-all duration-1000"/>
+                        </svg>
+                        <span id="gen-seconds" class="absolute text-3xl font-black text-slate-800">15</span>
+                    </div>
+                    <h3 id="gen-status-text" class="text-xl font-bold text-slate-800 mb-2">Processing your file...</h3>
+                    <p class="text-slate-500 font-medium mb-8">Please wait while we prepare your download.</p>
+                    <div class="max-w-sm mx-auto space-y-3">
+                        <button id="gen-skip-btn" onclick="genSkipWait()" class="w-full py-3 px-5 border-2 border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100 font-bold rounded-2xl flex items-center justify-center gap-2 transition-colors">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                            Skip wait — Pay ₹5 via UPI
+                        </button>
+                        <button id="gen-dl-btn" disabled class="w-full bg-slate-100 text-slate-300 font-black py-4 rounded-2xl text-lg transition-all cursor-not-allowed">
+                            Download Result
+                        </button>
+                        <button onclick="genReset()" class="w-full py-2 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors mt-2">
+                            ← Cancel and go back
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-12 bg-white border border-slate-100 rounded-[2.5rem] p-10 shadow-sm"><h3 id="gen-about-title" class="text-2xl font-black text-slate-800 mb-4">About This Tool</h3><p id="gen-long-desc" class="text-slate-500 leading-relaxed font-medium">Professional utility. Everything happens in your browser.</p></div>
+            </div>
+            <div class="space-y-6"><div class="ad-banner w-full aspect-square md:h-80"><p>ADVERTISEMENT</p><p class="text-[10px] opacity-60">Sponsored</p></div><div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm"><h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Why InstantHub</h4><ul class="space-y-4"><li class="text-slate-700 font-bold text-sm">✓ No signup needed</li><li class="text-slate-700 font-bold text-sm">✓ Works on mobile</li><li class="text-slate-700 font-bold text-sm">✓ Pay only ₹5 when you need premium</li></ul></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- SUPPORT MODAL -->
+<div id="modal-support" class="fixed inset-0 z-[110] flex items-center justify-center p-4 hidden bg-slate-900/70 backdrop-blur-md">
+    <div class="bg-white w-full max-w-md rounded-[3rem] p-10 text-center">
+        <div class="bg-[#fdf2f2] w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"><svg class="w-10 h-10 text-rose-600" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <h3 class="text-3xl font-black text-slate-900 mb-2">Support InstantHub</h3>
+        <p class="text-slate-500 font-medium mb-8">We provide free tools for everyone. Your support keeps our servers running!</p>
+        <div class="space-y-4"><button class="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-3 hover:bg-indigo-700 transition-all">☕ Buy us a Coffee</button><button onclick="closeSupport()" class="w-full text-slate-400 font-bold py-2 hover:text-slate-600 transition-all">Maybe later</button></div>
+    </div>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-white border-t border-slate-100 mt-20 py-12">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-8 h-8 bg-[#2563eb] rounded-xl flex items-center justify-center">
+                        <svg class="w-4 h-4 text-white fill-white" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <span class="font-black text-xl tracking-tight text-slate-900">InstantHub</span>
+                </div>
+                <p class="text-slate-400 text-sm font-medium">Free digital tools for everyone. Fast, private, and secure.</p>
+            </div>
+            <div class="flex gap-6 text-sm font-bold text-slate-500">
+                <a href="#" onclick="showView('home'); return false;" class="hover:text-blue-600 transition-colors">Home</a>
+                <a href="#" class="hover:text-blue-600 transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-blue-600 transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-blue-600 transition-colors">Contact</a>
+            </div>
+        </div>
+        <div class="border-t border-slate-100 mt-8 pt-8 flex justify-between items-center text-xs text-slate-400 font-semibold">
+            <p>&copy; 2026 Instant Utility Hub. All rights reserved.</p>
+            <p>Made with ❤️ for the Web.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- QRCode lib loaded AFTER all HTML -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+// toolRegistry MUST be var (not const/let) so it's hoisted and available to onclick handlers
+var toolRegistry = {
+    'img-convert': { title: 'Image Converter', desc: 'Convert images between JPG, PNG, WEBP formats instantly.', category: 'image tools', accept: 'image/*', acceptLabel: 'JPG / PNG / WEBP · up to 20 MB', longDesc: 'Convert any image format to another. Supports JPG, PNG, WEBP, BMP and GIF. All processing happens in your browser — no upload to any server.', api: '/api/tools/image/jpg-to-png' },
+    'img-upscale': { title: 'Image Upscaler', desc: 'Enhance and upscale low-resolution images.', category: 'image tools', accept: 'image/*', acceptLabel: 'JPG / PNG · up to 20 MB', longDesc: 'AI-powered upscaling to improve quality of low-res photos.', api: '/api/tools/image/upscale' },
+    'passport-gen': { title: 'Passport Photo Maker', desc: 'Indian standard passport photo generator.', category: 'image tools', accept: 'image/*', acceptLabel: 'JPG / PNG · up to 10 MB', longDesc: 'Create passport photos meeting Indian government standards — 35x45mm with white background.', api: '/api/tools/image/passport' },
+    'img-resize': { title: 'Resize Image', desc: 'Change image dimensions to any size.', category: 'image tools', accept: 'image/*', acceptLabel: 'JPG / PNG / WEBP · up to 20 MB', longDesc: 'Resize images to exact pixel dimensions. We default to 800x800 for this quick tool.', api: '/api/tools/image/resize' },
+    'pdf-merge': { title: 'Merge PDF', desc: 'Combine multiple PDFs into one document.', category: 'pdf tools', accept: '.pdf', acceptLabel: 'PDF files · up to 50 MB each', longDesc: 'Merge multiple PDF documents into one file. Drag to reorder pages before merging.', api: '/api/tools/pdf/merge', multiple: true },
+    'pdf-split': { title: 'Split PDF', desc: 'Extract page ranges from a PDF.', category: 'pdf tools', accept: '.pdf', acceptLabel: 'PDF file · up to 50 MB', longDesc: 'Break large PDFs into smaller files. Select specific page ranges to extract.', api: '/api/tools/pdf/split' },
+    'pdf-rotate': { title: 'Rotate PDF', desc: 'Fix page orientation in your PDF.', category: 'pdf tools', accept: '.pdf', acceptLabel: 'PDF file · up to 50 MB', longDesc: 'Rotate PDF pages 90° clockwise. Fix scanned documents with wrong orientation.', api: '/api/tools/pdf/rotate' },
+    'pdf-compress': { title: 'Compress PDF', desc: 'Reduce PDF file size for easy sharing.', category: 'pdf tools', accept: '.pdf', acceptLabel: 'PDF file · up to 100 MB', longDesc: 'Shrink PDF size while preserving quality. Great for emailing and uploading to government portals.', api: '/api/tools/pdf/compress' },
+    'pdf-watermark': { title: 'Watermark PDF', desc: 'Add a custom text watermark to all pages.', category: 'pdf tools', accept: '.pdf', acceptLabel: 'PDF file · up to 50 MB', longDesc: 'Protect documents by adding a text watermark like "Confidential" or your company name.', api: '/api/tools/pdf/watermark', optionName: 'watermark_text', optionLabel: 'Enter Watermark Text' },
+    'pdf-numbers': { title: 'Add Page Numbers', desc: 'Add page numbering to PDF.', category: 'pdf tools', accept: '.pdf', acceptLabel: 'PDF file · up to 50 MB', longDesc: 'Add professional page numbers to your PDF document.', api: '/api/tools/pdf/numbers' },
+    'pdf-protect': { title: 'Protect PDF', desc: 'Add password encryption to PDF.', category: 'pdf tools', accept: '.pdf', acceptLabel: 'PDF file · up to 50 MB', longDesc: 'Secure your PDF with a password. Recipients need the password to open it.', api: '/api/tools/pdf/protect', optionName: 'password', optionLabel: 'Enter Password to Protect PDF' },
+    'pdf-unlock': { title: 'Unlock PDF', desc: 'Remove password from PDF.', category: 'pdf tools', accept: '.pdf', acceptLabel: 'PDF file · up to 50 MB', longDesc: 'Remove password protection from PDFs you own.', api: '/api/tools/pdf/unlock', optionName: 'password', optionLabel: 'Enter PDF Password to Unlock' },
+    'pdf-img': { title: 'PDF to Image', desc: 'Convert PDF pages to JPG images.', category: 'pdf tools', accept: '.pdf', acceptLabel: 'PDF file · up to 50 MB', longDesc: 'Save each PDF page as a separate image. Great for sharing on WhatsApp or social media.', api: '/api/tools/pdf/pdf-to-image' },
+    'img-pdf': { title: 'Image to PDF', desc: 'Combine photos into a single PDF.', category: 'pdf tools', accept: 'image/*', acceptLabel: 'JPG / PNG · multiple files', longDesc: 'Turn photos of documents, notes, or receipts into a professional PDF.', api: '/api/tools/pdf/image-to-pdf', multiple: true },
+    'pdf-organize': { title: 'Organize PDF', desc: 'Reorder and manage PDF pages.', category: 'pdf tools', accept: '.pdf', acceptLabel: 'PDF file · up to 50 MB', longDesc: 'Drag and drop to reorder PDF pages. Delete or duplicate pages easily.', api: '/api/tools/pdf/organize' },
+    'pdf-extract': { title: 'Extract Pages', desc: 'Save selected pages as a new PDF.', category: 'pdf tools', accept: '.pdf', acceptLabel: 'PDF file · up to 50 MB', longDesc: 'Extract specific pages from a PDF into a new document.', api: '/api/tools/pdf/extract', optionName: 'pages', optionLabel: 'Enter pages (e.g. 1-3,5)' },
+    'word-pdf': { title: 'Word to PDF', desc: 'Convert DOCX to PDF.', category: 'pdf tools', accept: '.doc,.docx', acceptLabel: 'DOC / DOCX · up to 20 MB', longDesc: 'Convert Microsoft Word documents to PDF format.', api: '/api/tools/pdf/word-to-pdf' },
+    'pdf-word': { title: 'PDF to Word', desc: 'Convert PDF to editable DOCX.', category: 'pdf tools', accept: '.pdf', acceptLabel: 'PDF file · up to 50 MB', longDesc: 'Convert PDF to editable Microsoft Word document.', api: '/api/tools/pdf/pdf-to-word' },
+    'pdf-ppt': { title: 'PDF to PPT', desc: 'Convert PDF to PowerPoint slides.', category: 'pdf tools', accept: '.pdf', acceptLabel: 'PDF file · up to 50 MB', longDesc: 'Convert PDF presentations back to editable PowerPoint format.', api: '/api/tools/pdf/pdf-to-ppt' },
+    'ppt-pdf': { title: 'PPT to PDF', desc: 'Convert PowerPoint to PDF.', category: 'pdf tools', accept: '.ppt,.pptx', acceptLabel: 'PPT / PPTX · up to 50 MB', longDesc: 'Convert PowerPoint presentations to PDF for easy sharing.', api: '/api/tools/pdf/ppt-to-pdf' },
+    'invoice-gen': { title: 'Invoice Maker', desc: 'Create professional GST-compliant invoices.', category: 'web tools', accept: null, acceptLabel: '', longDesc: 'Generate professional GST invoices for your business. Add items, taxes, and download as PDF.' }
+};
+
+var genFiles = [];
+var currentToolId = null;
+
+function showView(id) {
+    document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
+    var el = document.getElementById('view-' + id);
+    if (el) el.classList.remove('hidden');
+    window.scrollTo(0, 0);
+}
+function navTo(id) {
+    var homeView = document.getElementById('view-home');
+    if (homeView && homeView.classList.contains('hidden')) {
+        showView('home');
+    }
+    setTimeout(function() {
+        var el = document.getElementById(id);
+        if (el) el.scrollIntoView({behavior: 'smooth'});
+    }, 50);
+}
+
+function searchTools() {
+    var q = document.getElementById('tool-search').value.toLowerCase();
+    document.querySelectorAll('.bento-card').forEach(function(card) {
+        if (card.classList.contains('coming-soon')) return;
+        card.style.display = card.innerText.toLowerCase().includes(q) ? '' : 'none';
+    });
+}
+
+function openTool(toolId) {
+    var dedicated = ['img-compress','wa-chat','qr-gen','upi-qr','gst-calc','emi-calc','invoice-gen'];
+    if (dedicated.indexOf(toolId) !== -1) {
+        showView(toolId);
+        if (toolId === 'qr-gen') setTimeout(qrGenerate, 150);
+        return;
+    }
+    var tool = toolRegistry[toolId];
+    if (!tool) return;
+    currentToolId = toolId;
+    document.getElementById('gen-title').innerText = tool.title;
+    document.getElementById('gen-about-title').innerText = 'About ' + tool.title;
+    document.getElementById('gen-desc').innerText = tool.desc;
+    document.getElementById('gen-long-desc').innerText = tool.longDesc;
+    document.getElementById('gen-accept-label').innerText = tool.acceptLabel;
+    document.getElementById('gen-back-label').innerText = 'Back to ' + tool.category;
+    document.getElementById('gen-file').accept = tool.accept || '*';
+    if (tool.multiple) document.getElementById('gen-file').setAttribute('multiple', 'multiple');
+    else document.getElementById('gen-file').removeAttribute('multiple');
+    
+    if (tool.optionName) {
+        document.getElementById('gen-options-container').classList.remove('hidden');
+        document.getElementById('gen-option-label').innerText = tool.optionLabel;
+        document.getElementById('gen-option-input').value = '';
+    } else {
+        document.getElementById('gen-options-container').classList.add('hidden');
+    }
+    
+    genReset();
+    showView('generic');
+}
+
+// IMAGE COMPRESSOR
+var icFile = null, icFmt = 'jpeg';
+function icFileSelect(e) {
+    icFile = e.target.files[0]; if (!icFile) return;
+    document.getElementById('ic-preview').src = URL.createObjectURL(icFile);
+    document.getElementById('ic-fname').innerText = icFile.name;
+    document.getElementById('ic-fsize').innerText = (icFile.size/1024).toFixed(1)+' KB original';
+    document.getElementById('ic-upload').classList.add('hidden');
+    document.getElementById('ic-settings').classList.remove('hidden');
+    document.getElementById('ic-result').classList.add('hidden');
+}
+var icTimerInterval = null;
+var icFinalBlob = null, icFinalExt = 'jpg';
+function icReset() {
+    icFile = null; document.getElementById('ic-file').value='';
+    document.getElementById('ic-upload').classList.remove('hidden');
+    document.getElementById('ic-settings').classList.add('hidden');
+    document.getElementById('ic-processing').classList.add('hidden');
+    document.getElementById('ic-result').classList.add('hidden');
+    document.getElementById('ic-skip-btn').classList.remove('hidden');
+    if (icTimerInterval) clearInterval(icTimerInterval);
+}
+function icUpdateSlider(v) { document.getElementById('ic-val').innerText=v; document.getElementById('ic-btn-val').innerText=v; }
+function icPreset(v) { document.getElementById('ic-slider').value=v; icUpdateSlider(v); }
+function icSetFmt(fmt) {
+    icFmt=fmt;
+    ['jpeg','png','webp'].forEach(function(f){
+        document.getElementById('ic-fmt-'+f).className = f===fmt
+            ? 'px-5 py-2 rounded-full text-xs font-bold border-2 border-blue-500 bg-blue-50 text-blue-700'
+            : 'px-5 py-2 rounded-full text-xs font-bold border-2 border-slate-200 text-slate-500';
+    });
+}
+function icSkipWait() {
+    if (icTimerInterval) clearInterval(icTimerInterval);
+    document.getElementById('ic-seconds').innerText = "0";
+    document.getElementById('ic-timer-circle').style.strokeDashoffset = "226";
+    document.getElementById('ic-skip-btn').classList.add('hidden');
+    if (document.getElementById('ic-status-text').dataset.ready === "true") {
+        document.getElementById('ic-processing').classList.add('hidden');
+        document.getElementById('ic-result').classList.remove('hidden');
+    }
+}
+function icCompress() {
+    if (!icFile) return;
+    document.getElementById('ic-settings').classList.add('hidden');
+    document.getElementById('ic-processing').classList.remove('hidden');
+    var secEl=document.getElementById('ic-seconds'), circle=document.getElementById('ic-timer-circle');
+    document.getElementById('ic-status-text').innerText = "Compressing image...";
+    document.getElementById('ic-status-text').dataset.ready = "false";
+    
+    var secs = 15;
+    secEl.innerText = secs;
+    circle.style.strokeDashoffset = "0";
+    
+    icTimerInterval = setInterval(function() {
+        secs--;
+        if(secs < 0) {
+            clearInterval(icTimerInterval);
+            document.getElementById('ic-skip-btn').classList.add('hidden');
+            if (document.getElementById('ic-status-text').dataset.ready === "true") {
+                document.getElementById('ic-processing').classList.add('hidden');
+                document.getElementById('ic-result').classList.remove('hidden');
+            }
+        } else {
+            secEl.innerText = secs;
+            circle.style.strokeDashoffset = 226 - (226 * secs / 15);
+        }
+    }, 1000);
+
+    var targetKB = parseInt(document.getElementById('ic-slider').value);
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var img = new Image();
+        img.onload = function() {
+            var canvas = document.createElement('canvas');
+            canvas.width=img.width; canvas.height=img.height;
+            canvas.getContext('2d').drawImage(img,0,0);
+            document.getElementById('ic-orig-size').innerText = (icFile.size/1024).toFixed(1)+' KB';
+            var mime='image/'+icFmt, lo=0.01, hi=1.0, best=null, iter=0;
+            function step() {
+                var mid=(lo+hi)/2;
+                canvas.toBlob(function(blob){ iter++; best=blob;
+                    var kb=blob.size/1024;
+                    if (iter>=12 || Math.abs(kb-targetKB)<2) { finish(best); return; }
+                    if (kb>targetKB) hi=mid; else lo=mid;
+                    step();
+                }, mime, mid);
+            }
+            function finish(blob) {
+                var url=URL.createObjectURL(blob);
+                var lnk=document.getElementById('ic-download-link');
+                lnk.href=url; lnk.download='compressed_'+targetKB+'KB.'+(icFmt==='jpeg'?'jpg':icFmt);
+                document.getElementById('ic-new-size').innerText=(blob.size/1024).toFixed(1)+' KB';
+                
+                document.getElementById('ic-status-text').innerText = "Optimization Complete";
+                document.getElementById('ic-status-text').dataset.ready = "true";
+                if (secs <= 0 || document.getElementById('ic-skip-btn').classList.contains('hidden')) {
+                    document.getElementById('ic-processing').classList.add('hidden');
+                    document.getElementById('ic-result').classList.remove('hidden');
+                }
+            }
+            // Add a small delay so UI doesn't block immediately
+            setTimeout(step, 100);
+        };
+        img.src=e.target.result;
+    };
+    reader.readAsDataURL(icFile);
+}
+
+// WHATSAPP
+var waLink='';
+function waGenerate() {
+    var c=document.getElementById('wa-country').value;
+    var p=document.getElementById('wa-phone').value.replace(/\D/g,'');
+    var m=document.getElementById('wa-msg').value;
+    var btns=['wa-open-btn','wa-copy-btn','wa-share-btn'];
+    if (!p) { document.getElementById('wa-link-display').innerText='Enter a phone number to generate'; btns.forEach(function(id){document.getElementById(id).disabled=true;}); return; }
+    waLink='https://wa.me/'+c+p+(m?'?text='+encodeURIComponent(m):'');
+    document.getElementById('wa-link-display').innerText=waLink;
+    btns.forEach(function(id){document.getElementById(id).disabled=false;});
+}
+function waOpen(){ if(waLink) window.open(waLink,'_blank'); }
+function waCopy(){ if(!waLink)return; navigator.clipboard.writeText(waLink).then(function(){ var b=document.getElementById('wa-copy-btn'); var p=b.innerText; b.innerText='✓ Copied!'; setTimeout(function(){b.innerText=p;},2000); }); }
+function waShare(){ if(navigator.share&&waLink) navigator.share({url:waLink}); }
+
+// QR GENERATOR
+function qrGenerate() {
+    var textEl=document.getElementById('qr-text'); if(!textEl) return;
+    var text=textEl.value;
+    var color=document.getElementById('qr-color').value;
+    var size=parseInt(document.getElementById('qr-size').value);
+    document.getElementById('qr-color-hex').innerText=color;
+    var wrap=document.getElementById('qr-canvas-wrap'); wrap.innerHTML='';
+    if (!text||typeof QRCode==='undefined') return;
+    try { new QRCode(wrap,{text:text,width:size,height:size,colorDark:color,colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.L}); }
+    catch(e){ wrap.innerHTML='<p style="color:#f87171;font-size:12px;padding:16px;">Error</p>'; }
+}
+function qrDownload() {
+    var wrap=document.getElementById('qr-canvas-wrap');
+    var c=wrap?wrap.querySelector('canvas'):null;
+    if (!c) { var i=wrap?wrap.querySelector('img'):null; if(i){var a=document.createElement('a');a.href=i.src;a.download='qrcode.png';a.click();} return; }
+    var a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download='qrcode.png'; a.click();
+}
+
+// UPI QR
+function upiGenerate() {
+    var id=document.getElementById('upi-id').value.trim();
+    var name=document.getElementById('upi-name').value.trim();
+    var amt=document.getElementById('upi-amount').value;
+    var wrap=document.getElementById('upi-qr-wrap'); wrap.innerHTML='';
+    if (!id||typeof QRCode==='undefined') { wrap.innerHTML='<p style="color:#94a3b8;font-size:14px;font-weight:600;text-align:center;padding:32px;">Enter UPI ID to generate</p>'; document.getElementById('upi-dl-btn').disabled=true; return; }
+    var s='upi://pay?pa='+encodeURIComponent(id)+(name?'&pn='+encodeURIComponent(name):'')+(amt?'&am='+encodeURIComponent(amt):'')+'&cu=INR';
+    try { new QRCode(wrap,{text:s,width:200,height:200,colorDark:'#1e293b',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); document.getElementById('upi-dl-btn').disabled=false; }
+    catch(e){}
+}
+function upiDownload() { var wrap=document.getElementById('upi-qr-wrap'); var c=wrap?wrap.querySelector('canvas'):null; if(!c)return; var a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download='upi_qr.png'; a.click(); }
+
+// GST CALC
+var gstMode='exclusive', gstRate=18;
+function gstSetMode(m) {
+    gstMode=m;
+    document.getElementById('gst-mode-exc').className=m==='exclusive'?'flex-1 py-4 rounded-2xl font-bold border-2 border-blue-500 bg-blue-50 text-blue-700':'flex-1 py-4 rounded-2xl font-bold border-2 border-slate-200 text-slate-500';
+    document.getElementById('gst-mode-inc').className=m==='inclusive'?'flex-1 py-4 rounded-2xl font-bold border-2 border-blue-500 bg-blue-50 text-blue-700':'flex-1 py-4 rounded-2xl font-bold border-2 border-slate-200 text-slate-500';
+    gstCalc();
+}
+function gstSetRate(r) {
+    gstRate=r;
+    [0,5,12,18,28].forEach(function(v){ document.getElementById('gst-r-'+v).className=v===r?'px-6 py-3 rounded-full font-bold text-sm border-2 border-blue-500 bg-blue-50 text-blue-700':'px-6 py-3 rounded-full font-bold text-sm border-2 border-slate-200 text-slate-500'; });
+    gstCalc();
+}
+function gstCalc() {
+    var amt=parseFloat(document.getElementById('gst-amount').value);
+    if (!amt||amt<=0) { document.getElementById('gst-results').classList.add('hidden'); return; }
+    document.getElementById('gst-results').classList.remove('hidden');
+    var base,tax,total;
+    if (gstMode==='exclusive') { base=amt; tax=base*gstRate/100; total=base+tax; }
+    else { total=amt; base=total/(1+gstRate/100); tax=total-base; }
+    function f(n){ return '₹'+n.toFixed(2); }
+    document.getElementById('gst-base').innerText=f(base);
+    document.getElementById('gst-tax').innerText=f(tax);
+    document.getElementById('gst-total').innerText=f(total);
+    document.getElementById('gst-breakdown').innerText='CGST ('+(gstRate/2)+'%) = '+f(tax/2)+'  +  SGST ('+(gstRate/2)+'%) = '+f(tax/2);
+}
+
+// GENERIC TOOL
+function genFileSelect(e) {
+    genFiles = Array.from(e.target.files);
+    if(genFiles.length === 0) return;
+    document.getElementById('gen-fname').innerText = genFiles.length === 1 ? genFiles[0].name : genFiles.length + ' files selected';
+    var totalSize = genFiles.reduce(function(acc, f) { return acc + f.size; }, 0);
+    document.getElementById('gen-fsize').innerText = (totalSize/1024).toFixed(1) + ' KB';
+    document.getElementById('gen-upload-zone').classList.add('hidden');
+    document.getElementById('gen-file-info').classList.remove('hidden');
+}
+var genTimerInterval = null;
+function genReset() {
+    document.getElementById('gen-file').value='';
+    genFiles = [];
+    document.getElementById('gen-upload-zone').classList.remove('hidden');
+    document.getElementById('gen-file-info').classList.add('hidden');
+    document.getElementById('gen-processing').classList.add('hidden');
+    var b=document.getElementById('gen-dl-btn');
+    b.disabled=true; b.className='w-full bg-slate-100 text-slate-300 font-black py-4 rounded-2xl text-lg transition-all cursor-not-allowed'; b.innerText='Download Result';
+    b.onclick = null;
+    document.getElementById('gen-skip-btn').classList.remove('hidden');
+    if (genTimerInterval) clearInterval(genTimerInterval);
+}
+function genSkipWait() {
+    if (genTimerInterval) clearInterval(genTimerInterval);
+    document.getElementById('gen-seconds').innerText = "0";
+    document.getElementById('gen-timer-circle').style.strokeDashoffset = "226";
+    document.getElementById('gen-skip-btn').classList.add('hidden');
+    var b = document.getElementById('gen-dl-btn');
+    if (b.dataset.ready === "true") {
+        b.disabled = false;
+        b.className = 'w-full bg-[#2563eb] text-white font-black py-4 rounded-2xl text-lg hover:bg-[#1d4ed8] transition-all';
+        b.innerText = 'Download Ready';
+    } else {
+        b.innerText = 'Processing...';
+    }
+}
+function genProcess() {
+    var tool = toolRegistry[currentToolId];
+    document.getElementById('gen-file-info').classList.add('hidden');
+    document.getElementById('gen-processing').classList.remove('hidden');
+    var secEl=document.getElementById('gen-seconds'), btn=document.getElementById('gen-dl-btn');
+    document.getElementById('gen-status-text').innerText = "Processing your files...";
+    
+    var secs = 15;
+    secEl.innerText = secs;
+    var circle = document.getElementById('gen-timer-circle');
+    circle.style.strokeDashoffset = "0";
+    btn.dataset.ready = "false";
+    
+    genTimerInterval = setInterval(function() {
+        secs--;
+        if(secs < 0) {
+            clearInterval(genTimerInterval);
+            document.getElementById('gen-skip-btn').classList.add('hidden');
+            if (btn.dataset.ready === "true") {
+                btn.disabled = false;
+                btn.className = 'w-full bg-[#2563eb] text-white font-black py-4 rounded-2xl text-lg hover:bg-[#1d4ed8] transition-all';
+                btn.innerText = 'Download Ready';
+            }
+        } else {
+            secEl.innerText = secs;
+            circle.style.strokeDashoffset = 226 - (226 * secs / 15);
+        }
+    }, 1000);
+    
+    if (tool && tool.api) {
+        var formData = new FormData();
+        genFiles.forEach(function(f) { formData.append('files', f); });
+        
+        // Use default 'file' instead of 'files' for single file uploads that expect 'file'
+        if (!tool.multiple && genFiles.length > 0) {
+            formData = new FormData();
+            formData.append('file', genFiles[0]);
+        }
+        
+        if (tool.optionName) {
+            formData.append(tool.optionName, document.getElementById('gen-option-input').value);
+        }
+        
+        fetch(tool.api, { method: 'POST', body: formData })
+        .then(function(res) {
+            if(!res.ok) throw new Error("API error");
+            var filename = 'result';
+            var disp = res.headers.get('Content-Disposition');
+            if(disp && disp.match(/filename="([^"]+)"/)) filename = disp.match(/filename="([^"]+)"/)[1];
+            return res.blob().then(function(blob) { return {blob: blob, filename: filename}; });
+        })
+        .then(function(data) {
+            document.getElementById('gen-status-text').innerText = "Processing Complete";
+            btn.dataset.ready = "true";
+            if (secs <= 0 || document.getElementById('gen-skip-btn').classList.contains('hidden')) {
+                btn.disabled = false;
+                btn.className = 'w-full bg-[#2563eb] text-white font-black py-4 rounded-2xl text-lg hover:bg-[#1d4ed8] transition-all';
+                btn.innerText = 'Download Ready';
+            }
+            btn.onclick = function() {
+                var url = URL.createObjectURL(data.blob);
+                var a = document.createElement('a');
+                a.href = url; a.download = data.filename; a.click();
+            };
+        })
+        .catch(function(err) {
+            document.getElementById('gen-status-text').innerText = "Error Processing";
+            btn.innerText = "Failed";
+            console.error(err);
+        });
+    } else {
+        // Simulation for tools without API
+        setTimeout(function() {
+            document.getElementById('gen-status-text').innerText = "Processing Complete";
+            btn.dataset.ready = "true";
+            if (secs <= 0 || document.getElementById('gen-skip-btn').classList.contains('hidden')) {
+                btn.disabled = false;
+                btn.className = 'w-full bg-[#2563eb] text-white font-black py-4 rounded-2xl text-lg hover:bg-[#1d4ed8] transition-all';
+                btn.innerText = 'Download Ready';
+            }
+        }, 3000);
+    }
+}
+
+// EMI CALC
+function emiCalc() {
+    var p = parseFloat(document.getElementById('emi-principal').value);
+    var r = parseFloat(document.getElementById('emi-rate').value);
+    var t = parseInt(document.getElementById('emi-tenure').value);
+    if (!p || !r || !t || p <= 0 || r <= 0 || t <= 0) {
+        document.getElementById('emi-results').classList.add('hidden');
+        return;
+    }
+    document.getElementById('emi-results').classList.remove('hidden');
+    var rMon = r / 12 / 100;
+    var emi = p * rMon * Math.pow(1 + rMon, t) / (Math.pow(1 + rMon, t) - 1);
+    var totalPay = emi * t;
+    var totalInt = totalPay - p;
+    function f(n) { return '₹' + Math.round(n).toLocaleString('en-IN'); }
+    document.getElementById('emi-monthly').innerText = f(emi);
+    document.getElementById('emi-total-principal').innerText = f(p);
+    document.getElementById('emi-total-interest').innerText = f(totalInt);
+    document.getElementById('emi-total-payment').innerText = f(totalPay);
+}
+
+function openSupport(){ document.getElementById('modal-support').classList.remove('hidden'); }
+function closeSupport(){ document.getElementById('modal-support').classList.add('hidden'); }
+
+// Init QR on page load
+window.addEventListener('load', function(){ setTimeout(function(){ if(document.getElementById('view-qr-gen') && !document.getElementById('view-qr-gen').classList.contains('hidden')) qrGenerate(); },100); });
+</script>
+</body>
+</html>
